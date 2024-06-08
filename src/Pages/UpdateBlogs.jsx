@@ -43,7 +43,6 @@ export default function UpdateBlog({ user }) {
         }
     }
 
-
     async function handleUpdateSubmit(e) {
         e.preventDefault();
 
@@ -77,7 +76,6 @@ export default function UpdateBlog({ user }) {
         }
     }
 
-
     // Play sound function
     const playSound = () => {
         const audio = new Audio(clickSound);
@@ -85,21 +83,20 @@ export default function UpdateBlog({ user }) {
     };
 
     return (
-        <div className="flex justify-center items-center min-h-screen" style={{ background: 'linear-gradient(300deg, #000000, #ffffff)' }}>
-            <section className="flex flex-col items-center w-full max-w-4xl mx-auto">
+        <div className="flex flex-col justify-center items-center min-h-screen p-4" style={{ background: 'linear-gradient(300deg, #000000, #ffffff)' }}>
+            <section className="flex flex-col items-center w-full max-w-5xl mx-auto">
                 {blogsList.map((blog) => (
-                    <div key={blog.id} className="max-w-xl w-full bg-teal-900 text-white rounded-lg shadow-lg m-4">
+                    <div key={blog.id} className="w-full bg-teal-900 text-white rounded-lg shadow-lg m-4">
                         <img
                             src={blog.imgUrl}
                             alt={blog.title}
                             className="w-full h-64 object-cover rounded-t-lg hover-blog-post-wobble"
                         />
                         <div className="p-6">
-                            <h1 className="text-2xl font-bold mb-2"> Title : {blog.title}</h1>
-                            <p className="text-sm">Published on : {new Date(blog.date.seconds * 1000).toLocaleDateString()} </p>
-                            <p>By : {blog.author}</p>
+                            <h1 className="text-2xl font-bold mb-2">Title: {blog.title}</h1>
+                            <p className="text-sm">Published on: {new Date(blog.date.seconds * 1000).toLocaleDateString()}</p>
+                            <p>By: {blog.author}</p>
                             <p className="mt-4" style={{ whiteSpace: 'pre-line' }}>Content: {blog.content}</p>
-
                         </div>
                         <div className="flex justify-center mb-4">
                             <button className="bg-red-500 text-white px-4 py-2 rounded mx-2"
@@ -117,8 +114,8 @@ export default function UpdateBlog({ user }) {
             </section>
 
             {isDialogOpen && (
-                <div className="fixed inset-0 flex justify-center items-center" style={{ background: 'linear-gradient(300deg, #000000, #ffffff)', zIndex: 50 }}>
-                    <dialog open className="bg-white p-4 rounded shadow-lg w-full max-w-md">
+                <div className="fixed inset-0 flex justify-center items-center bg-black bg-opacity-50">
+                    <dialog open className="bg-white p-6 rounded shadow-lg w-full max-w-md">
                         <h2 className="text-xl font-bold mb-4">Update Blog Post</h2>
                         <form onSubmit={handleUpdateSubmit}>
                             <div className="mb-4">

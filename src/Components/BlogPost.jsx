@@ -37,7 +37,6 @@ export default function BlogPost({ user }) {
         window.scrollTo({ top: 0, behavior: 'smooth' });
     };
 
-
     const playClickSound = () => {
         const audio = new Audio(clickSound);
         audio.play();
@@ -47,7 +46,7 @@ export default function BlogPost({ user }) {
         <div className="flex justify-center">
             <section className="flex flex-col items-center w-full max-w-4xl mx-auto">
                 {currentPosts.map((blog) => (
-                    <div key={blog.id} className="max-w-xl w-full bg-teal-900 text-white rounded-lg shadow-2xl  m-4 gradient-background2">
+                    <div key={blog.id} className="max-w-xl w-full bg-teal-900 text-white rounded-lg shadow-2xl m-4 gradient-background2">
                         <img
                             src={blog.imgUrl}
                             alt={blog.title}
@@ -57,9 +56,7 @@ export default function BlogPost({ user }) {
                             <h1 className="text-2xl font-bold mb-2">Title: {blog.title}</h1>
                             <p className="text-sm">Published on: {new Date(blog.date.seconds * 1000).toLocaleDateString()}</p>
                             <p>Author: {blog.author}</p>
-                            // Inside the return statement of your BlogPost component
                             <p className="mt-4" style={{ whiteSpace: 'pre-line' }}>Content: {blog.content}</p>
-
                         </div>
                     </div>
                 ))}
@@ -74,7 +71,6 @@ export default function BlogPost({ user }) {
                         ))}
                     </ul>
                 </nav>
-
             </section>
         </div>
     );

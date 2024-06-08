@@ -59,11 +59,11 @@ export default function MyBlogs() {
     };
 
     return (
-        <div className="flex flex-col items-center min-h-screen" style={{ background: 'linear-gradient(300deg, #000000, #ffffff)' }}>
-            <div className="flex flex-wrap justify-center">
+        <div className="d-flex flex-column align-items-center min-vh-100" style={{ background: 'linear-gradient(300deg, #000000, #ffffff)' }}>
+            <div className="d-flex flex-wrap justify-content-center w-100">
                 <div className="card text-white bg-dark m-2" style={{ width: '20rem', height: '40rem' }}>
                     <div style={{ position: 'relative', width: '100%', height: '100%' }} onMouseEnter={handleMouseEnter1} onMouseLeave={handleMouseLeave1}>
-                        <img src={imageSrc1} className="card-img-top" alt="Secret Diary" style={{ objectFit: 'cover', height: '100%', width: '100%' }} />
+                        <img src={imageSrc1} className="card-img-top" alt="Safe Place" style={{ objectFit: 'cover', height: '100%', width: '100%' }} />
                         <div className="card-body text-center border border-white rounded hover:text-teal-500 hover-animation p-4 d-flex flex-column justify-content-center" style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(0, 0, 0, 0.5)' }}>
                             <h1 className="card-title" style={{ fontWeight: 'bold', fontSize: '2.5rem' }}>Safe</h1>
                             <p style={{ fontWeight: 'bold', fontSize: '1.5rem' }}>Place</p>
@@ -89,8 +89,8 @@ export default function MyBlogs() {
                     </div>
                 </div>
             </div>
-            <div className="flex justify-center w-full">
-                <div style={{ width: '80%' }}>
+            <div className="d-flex justify-content-center w-100 mt-4">
+                <div className="w-100 w-sm-80">
                     <BlogPost user={user} />
                 </div>
             </div>
