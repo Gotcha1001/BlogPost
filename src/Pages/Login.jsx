@@ -10,13 +10,11 @@ export default function Login({ setUser }) {
     const navigate = useNavigate();
 
     const handleRegister = async () => {
-        // Check if the email is a valid format
         if (!/\S+@\S+\.\S+/.test(email)) {
             alert('Please enter a valid email address');
             return;
         }
 
-        // Check if email and password are not empty
         if (!email || !password) {
             alert('Please enter an email and password');
             return;
@@ -26,7 +24,6 @@ export default function Login({ setUser }) {
             await createUserWithEmailAndPassword(auth, email, password);
             setEmail('');
             setPassword('');
-            // Redirect to home page for new users
             navigate("/");
         } catch (err) {
             console.error(err);
@@ -34,7 +31,6 @@ export default function Login({ setUser }) {
     };
 
     const handleSignIn = async () => {
-        // Check if email and password are not empty
         if (!email || !password) {
             alert('Please enter an email and password');
             return;
@@ -44,29 +40,26 @@ export default function Login({ setUser }) {
             await signInWithEmailAndPassword(auth, email, password);
             setEmail('');
             setPassword('');
-            // Check if the user has any blogs
-            // Redirect to MyBlogs page for returning users
             navigate("/myblogs");
-            playClickSound(); // Play sound on successful login
+            playClickSound();
         } catch (err) {
             if (err.code === 'auth/user-not-found' || err.code === 'auth/invalid-email') {
                 alert('Please register');
+            } else if (err.code === 'auth/invalid-credential') {
+                alert('Invalid credentials, please try again or Register if you havent.');
             } else {
                 console.error(err);
             }
         }
     };
 
-
     const handleSignInWithGoogle = async () => {
         try {
             await signInWithPopup(auth, googleProvider);
             setEmail('');
             setPassword('');
-            // Check if the user has any blogs
-            // Redirect to MyBlogs page for returning users
             navigate("/myblogs");
-            playClickSound(); // Play sound on successful login
+            playClickSound();
         } catch (err) {
             console.error(err);
         }
@@ -78,7 +71,7 @@ export default function Login({ setUser }) {
     };
 
     return (
-        <div className="flex justify-center items-center min-h-screen">
+        <div className="flex justify-center items-center min-h-screen gradient-background2">
             <style>
                 {`
                     @keyframes gradientAnimation {
@@ -101,7 +94,7 @@ export default function Login({ setUser }) {
                     }
                 `}
             </style>
-            <div className="flex flex-col items-center bg-teal-900 text-white p-6 rounded-lg shadow-lg gap-4 w-full max-w-md border-4 border-white hover:bg-teal-800 transition duration-900 login-card">
+            <div className="flex flex-col items-center bg-teal-900 text-white p-6 rounded-lg shadow-lg gap-4 w-full max-w-md hover:bg-teal-800 transition duration-900 login-card">
                 <input
                     className="px-4 mt-3 py-2 rounded bg-gray-900 hover:bg-gray-500 focus:outline-none focus:ring-2 focus:ring-white"
                     placeholder="Email"
@@ -118,27 +111,21 @@ export default function Login({ setUser }) {
                 {isRegistering ? (
                     <button
                         className="px-6 mt-3 py-3 text-lg text-white rounded-lg bg-gray-950 hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-white"
-                        onClick={() => {
-                            handleRegister();
-                        }}
+                        onClick={handleRegister}
                     >
                         Register
                     </button>
                 ) : (
                     <button
                         className="px-6 mt-3 py-3 text-lg text-white rounded-lg bg-gray-950 hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-white"
-                        onClick={() => {
-                            handleSignIn();
-                        }}
+                        onClick={handleSignIn}
                     >
                         Sign In
                     </button>
                 )}
                 <button
                     className="px-6 mt-3 py-3 text-lg text-white rounded-lg bg-gray-950 hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-white"
-                    onClick={() => {
-                        handleSignInWithGoogle();
-                    }}
+                    onClick={handleSignInWithGoogle}
                 >
                     Sign in with Google
                 </button>

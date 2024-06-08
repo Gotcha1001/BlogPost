@@ -14,33 +14,6 @@ export default function Home() {
     const [hoveredImageSrc3, setHoveredImageSrc3] = useState("https://images.pexels.com/photos/4063235/pexels-photo-4063235.jpeg?auto=compress&cs=tinysrgb&w=800");
 
 
-    //add sound on entering the site
-    const [playSound, setPlaySound] = useState(false);
-
-    useEffect(() => {
-        // Create a new Audio object
-        const audio = new Audio("../assets/angelical-pad-143276.mp3");
-
-        if (playSound) {
-            // Play the audio when playSound is true
-            audio.play();
-            // Reset playSound to false after playing the audio
-            setPlaySound(false);
-        }
-
-        // Clean up the audio object
-        return () => {
-            audio.pause();
-            audio.currentTime = 0;
-        };
-    }, [playSound]);
-
-    useEffect(() => {
-        // Set playSound to true when the component mounts to play the sound
-        setPlaySound(true);
-    }, []);
-
-
     const handleMouseEnter1 = () => {
         setIsHovered1(true);
         setImageSrc1(hoveredImageSrc1);

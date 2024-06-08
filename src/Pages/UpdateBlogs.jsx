@@ -28,21 +28,37 @@ export default function UpdateBlog({ user }) {
     }, [user]);
 
     async function deleteBlog(id) {
-        const blogDoc = doc(db, "blogs", id);
-        await deleteDoc(blogDoc);
+        // Optimistically update the UI
         setBlogsList(prevBlogs => prevBlogs.filter(blog => blog.id !== id));
-        playSound(); // Play sound when blog is deleted
+
+        // Delete the blog post from Firestore
+        const blogDoc = doc(db, "blogs", id);
+        try {
+            await deleteDoc(blogDoc);
+            playSound(); // Play sound when blog is deleted
+        } catch (error) {
+            console.error("Failed to delete the blog post", error);
+            // Revert the local state if the delete operation fails
+            setBlogsList(prevBlogs => [...prevBlogs, blogsList.find(blog => blog.id === id)]);
+        }
     }
+
 
     async function handleUpdateSubmit(e) {
         e.preventDefault();
+
+        // Store a copy of the current blogsList to revert in case of failure
+        const previousBlogsList = [...blogsList];
+
         try {
+            // Optimistically update the UI
             setBlogsList(prevBlogs => prevBlogs.map(blog =>
                 blog.id === selectedBlog.id ? { ...selectedBlog } : blog
             ));
             setIsDialogOpen(false);
             playSound(); // Play sound when blog is updated
 
+            // Update the blog post in Firestore
             await setDoc(doc(db, "blogs", selectedBlog.id), {
                 author: selectedBlog.author,
                 content: selectedBlog.content,
@@ -54,8 +70,13 @@ export default function UpdateBlog({ user }) {
             });
         } catch (err) {
             console.error("Failed to update the blog post", err);
+
+            // Revert the UI if the update operation fails
+            setBlogsList(previousBlogsList);
+            setIsDialogOpen(true); // Reopen the dialog if needed
         }
     }
+
 
     // Play sound function
     const playSound = () => {
@@ -77,7 +98,8 @@ export default function UpdateBlog({ user }) {
                             <h1 className="text-2xl font-bold mb-2"> Title : {blog.title}</h1>
                             <p className="text-sm">Published on : {new Date(blog.date.seconds * 1000).toLocaleDateString()} </p>
                             <p>By : {blog.author}</p>
-                            <p className="mt-4">{blog.content}</p>
+                            <p className="mt-4" style={{ whiteSpace: 'pre-line' }}>Content: {blog.content}</p>
+
                         </div>
                         <div className="flex justify-center mb-4">
                             <button className="bg-red-500 text-white px-4 py-2 rounded mx-2"

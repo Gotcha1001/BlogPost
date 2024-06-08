@@ -147,3 +147,22 @@ body {
 .animate-wobble {
   animation: wobble 0.5s ease-in-out infinite;
 }
+
+.gradient-background2 {
+  background: linear-gradient(300deg, #000000, #10797a, #020824);
+  background-size: 180% 180%;
+  animation: gradient-animation2 12s ease infinite;
+  background-attachment: fixed; /* Keep background fixed when scrolling */
+}
+
+@keyframes gradient-animation2 {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
