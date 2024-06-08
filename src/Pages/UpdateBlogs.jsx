@@ -1,14 +1,14 @@
-import React from "react";
-import { Link, useMatch, useResolvedPath, useNavigate } from "react-router-dom";
+import React, { useEffect, useState } from 'react';
+import { useNavigate } from "react-router-dom";
 import { getDocs, collection, query, where, setDoc, doc, deleteDoc } from 'firebase/firestore';
 import { db, auth } from "../config/firebase"; // Import your firebase config
-import { useEffect, useState } from 'react';
 import clickSound from '../assets/short-swish-swoosh-whoosh-reverbed-103501.mp3'; // Import your sound file
 
 export default function UpdateBlog({ user }) {
     const [blogsList, setBlogsList] = useState([]);
     const [selectedBlog, setSelectedBlog] = useState(null);
     const [isDialogOpen, setIsDialogOpen] = useState(false);
+    const navigate = useNavigate();
 
     useEffect(() => {
         async function getBlogPostList() {
@@ -31,12 +31,18 @@ export default function UpdateBlog({ user }) {
         const blogDoc = doc(db, "blogs", id);
         await deleteDoc(blogDoc);
         setBlogsList(prevBlogs => prevBlogs.filter(blog => blog.id !== id));
-        playSoundAndRedirect(); // Play sound when blog is deleted
+        playSound(); // Play sound when blog is deleted
     }
 
     async function handleUpdateSubmit(e) {
         e.preventDefault();
         try {
+            setBlogsList(prevBlogs => prevBlogs.map(blog =>
+                blog.id === selectedBlog.id ? { ...selectedBlog } : blog
+            ));
+            setIsDialogOpen(false);
+            playSound(); // Play sound when blog is updated
+
             await setDoc(doc(db, "blogs", selectedBlog.id), {
                 author: selectedBlog.author,
                 content: selectedBlog.content,
@@ -46,36 +52,20 @@ export default function UpdateBlog({ user }) {
                 title: selectedBlog.title,
                 userId: selectedBlog.userId, // Add the userId field to the updated blog
             });
-            // Update the blogsList state with the updated blog
-            setBlogsList(prevBlogs => prevBlogs.map(blog => {
-                if (blog.id === selectedBlog.id) {
-                    return { ...selectedBlog };
-                } else {
-                    return blog;
-                }
-            }));
-            setIsDialogOpen(false);
-            playSoundAndRedirect(); // Play sound when blog is updated
         } catch (err) {
             console.error("Failed to update the blog post", err);
         }
     }
 
-    // Play sound and redirect function
-    const playSoundAndRedirect = () => {
+    // Play sound function
+    const playSound = () => {
         const audio = new Audio(clickSound);
         audio.play();
-
-        setTimeout(() => {
-            window.location.reload(); // Redirect or any other action you need
-        }, 2000); // Adjust the timeout duration to the length of your sound
     };
-
-
 
     return (
         <div className="flex justify-center items-center min-h-screen" style={{ background: 'linear-gradient(300deg, #000000, #ffffff)' }}>
-            <section className="flex flex-col items-center w-full max-w-4xl mx-auto"> {/* Updated this line */}
+            <section className="flex flex-col items-center w-full max-w-4xl mx-auto">
                 {blogsList.map((blog) => (
                     <div key={blog.id} className="max-w-xl w-full bg-teal-900 text-white rounded-lg shadow-lg m-4">
                         <img
@@ -131,7 +121,6 @@ export default function UpdateBlog({ user }) {
                                     className="w-full px-3 py-2 border rounded"
                                 />
                             </div>
-
                             <div className="mb-4">
                                 <label className="block text-gray-700">Content</label>
                                 <textarea
